@@ -13,7 +13,7 @@ parameter ADDRESS_BITS = 32 ;
 //inputs form fetch module 
 reg [ADDRESS_BITS-1:0] pc_tb         ;
 reg [31:0]             instruction_tb;
-reg [ADDRESS_BITS-1:0] pc_next_tb    ;
+//reg [ADDRESS_BITS-1:0] pc_next_tb    ;
 
 //inputs from alu
 //reg [ADDRESS_BITS-1:0] JALR_target;
@@ -28,6 +28,7 @@ wire [6:0] op_tb                     ;
 wire [2:0] funct3_tb                 ; 
 wire [6:0] funct7_tb                 ; 
 wire       pc_s_d_tb                 ;
+wire       flag_tb                   ;
 
 //output to GPRs 
 wire [4:0] read_sel1_tb              ;
@@ -37,9 +38,9 @@ wire       wen_tb                    ;
 
 //outputs to Pipeline Register
 wire [31:0] imm32_tb                 ;
-wire [ADDRESS_BITS-1:0] pc_o_tb      ;
+//wire [ADDRESS_BITS-1:0] pc_o_tb      ;
 wire [11:0] imm12_tb                 ;
-wire [ADDRESS_BITS-1:0] pc_next_o_tb ;
+//wire [ADDRESS_BITS-1:0] pc_next_o_tb ;
 
                        /*
                         ###################################################
@@ -60,6 +61,7 @@ Decoder #(.ADDRESS_BITS(ADDRESS_BITS)) u1 (
 .funct3(funct3_tb)           ,
 .funct7(funct7_tb)           ,
 .pc_s_d(pc_s_d_tb)           ,
+.flag(flag_tb)               ,
 
 .read_sel1(read_sel1_tb)     ,
 .read_sel2(read_sel2_tb)     ,
@@ -67,9 +69,9 @@ Decoder #(.ADDRESS_BITS(ADDRESS_BITS)) u1 (
 .wen(wen_tb)                 ,
 
 .imm32(imm32_tb)             ,
-.pc_next(pc_next_tb)         ,
-.pc_next_o(pc_next_o_tb)     ,
-.pc_o(pc_o_tb)               ,
+//.pc_next(pc_next_tb)         ,
+//.pc_next_o(pc_next_o_tb)     ,
+//.pc_o(pc_o_tb)               ,
 .imm12(imm12_tb)             
 
 );
@@ -202,7 +204,7 @@ task initialize ;
   begin
         instruction_tb   = 32'h0; 
         pc_tb            = 0    ;
-        pc_next_tb       = 0    ;
+        //pc_next_tb       = 0    ;
         out_of_loop_i_tb = 0    ;
         branch_tb        = 0    ;
   end

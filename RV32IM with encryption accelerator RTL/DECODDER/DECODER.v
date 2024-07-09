@@ -16,7 +16,7 @@ module Decoder #( parameter ADDRESS_BITS = 32 )
 
 //inputs form fetch module 
 input [ADDRESS_BITS-1:0] pc         ,
-input [ADDRESS_BITS-1:0] pc_next    ,
+//input [ADDRESS_BITS-1:0] pc_next    ,
 input [31:0] instruction            ,
 
 
@@ -45,9 +45,9 @@ output reg   wen                    ,
 
 //outputs to Pipeline Register
 output [31:0] imm32                 ,
-output [11:0] imm12                 , //*****
-output [ADDRESS_BITS-1:0] pc_next_o ,
-output [ADDRESS_BITS-1:0] pc_o       
+output [11:0] imm12                  //*****
+//output [ADDRESS_BITS-1:0] pc_next_o ,
+//output [ADDRESS_BITS-1:0] pc_o       
               
 );
 
@@ -111,20 +111,20 @@ assign j_imm_ext = {{11{j_imm[20]}} , j_imm }         ;
 assign shamt_imm = instruction[24:20]                 ;
 assign shamt_imm_ext = {27'b0 , shamt_imm }           ;
 
-assign pc_o      = pc                                 ;                   //to Pipeline Register
-assign pc_next_o = pc_next                            ;                   //to Pipeline Register
+//assign pc_o      = pc                                 ;                   //to Pipeline Register
+//assign pc_next_o = pc_next                            ;                   //to Pipeline Register
 //assign suspended = (op == 7'b1100111) && (read_sel1 != 'd0) ? 'd1 : 0;  //to fetch module
 assign imm12     = i_imm ;  
 
                                
-assign imm32 = (op == 7'b0000011 ) ? i_imm_ext : //load instruction
-               (op==  7'b0010011 ) ? i_imm_ext : //i-type
-               (op == 7'b0100011 ) ? s_imm_ext : //store instruction
-               (op == 7'b1100011 ) ? b_imm_ext : //branch instruction
-               (op == 7'b1101111 ) ? j_imm_ext : //jump and link instruction
-               (op == 7'b1100111 ) ? i_imm_ext : //jump and link instruction register
-               (op == 7'b0010011 && funct3 == 3'b001)? shamt_imm_ext:  //SLLI
-				       (op == 7'b0010011 && funct3 == 3'b101)? shamt_imm_ext:  //SRLI , SRAI
+assign imm32 =  (op == 7'b0010011 && funct3 == 3'b001)? shamt_imm_ext:  //SLLI
+		(op == 7'b0010011 && funct3 == 3'b101)? shamt_imm_ext:  //SRLI , SRAI
+                (op == 7'b0000011 ) ? i_imm_ext : //load instruction
+                (op==  7'b0010011 ) ? i_imm_ext : //i-type
+                (op == 7'b0100011 ) ? s_imm_ext : //store instruction
+                (op == 7'b1100011 ) ? b_imm_ext : //branch instruction
+                (op == 7'b1101111 ) ? j_imm_ext : //jump and link instruction
+                (op == 7'b1100111 ) ? i_imm_ext : //jump and link instruction register
                 0;
                
                
